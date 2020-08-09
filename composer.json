@@ -1,0 +1,11 @@
+{
+    "require": {
+        "php": "^7.1.2",
+        "symfony/intl": "^5.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\" : ""
+        }
+    }
+}
