@@ -3,6 +3,7 @@
 namespace App;
 
 require_once __DIR__.'/vendor/autoload.php';
+include_once 'config.php';
 
 use App\Controller\UserController;
 use App\Db\PdoMysqlConnection;

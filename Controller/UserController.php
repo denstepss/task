@@ -7,7 +7,6 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Repository\UserRepositoryInterface;
 use Symfony\Component\Intl\Currencies;
-use Exception;
 
 class UserController extends Controller
 {
@@ -19,8 +18,7 @@ class UserController extends Controller
     }
 
     public function indexAction(){
-
-        $this->view(__DIR__.'/../Views/index.php', ['users' => $this->repository->findBy([],['id' => 'DESC']),
+        $this->view(__DIR__.'/../Views/index.php', ['users' => $this->repository->findAll(),
             'currencies' => Currencies::getNames()]);
     }
 
@@ -33,7 +31,6 @@ class UserController extends Controller
     }
 
     public function editAction($request){
-
         if(isset($_GET['id'])) {
             $this->view(__DIR__ . '/../Views/edit.php', ['user' => $this->repository->find($_GET['id']),
                 'currencies' => Currencies::getNames()]);

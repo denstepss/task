@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "4dc64da81592cf5d90d23a012a9ffa8f",
+    "content-hash": "da0da8c111daac3cc183729e55452364",
     "packages": [
         {
             "name": "symfony/intl",
@@ -217,6 +217,8 @@
     "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
-    "platform": [],
+    "platform": {
+        "php": "^7.1.2"
+    },
     "platform-dev": []
 }

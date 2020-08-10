@@ -3,7 +3,7 @@
 <head></head>
 <body>
 <center>
-<form action="/update" method="post">
+<form action="/create" method="post">
     <p><input type="text" placeholder="Firstname" name="firstname" required></p>
     <p><input type="text" placeholder="Lastname" name="lastname" required></p>
     <p><input type="text" placeholder="Patronymic" name="patronymic" required></p>
