@@ -1,5 +1,6 @@
 <?php
 
+declare(strict_types=1);
 
 namespace App\Repository;
 
@@ -22,7 +23,7 @@ class UserRepository implements UserRepositoryInterface
         }
     }
 
-    public function find($userId)
+    public function find(int $userId)
     {
         if($this->cache){
             if(!empty($cached = $this->cache->get($userId))) { return $cached; }
@@ -36,7 +37,7 @@ class UserRepository implements UserRepositoryInterface
 
     }
 
-    public function findAll()
+    public function findAll(): array
     {
         if($this->cache && !empty($data = $this->cache->get('all'))) { return $data; }
         $result =  $this->findBy([],['id' => 'DESC']);
@@ -46,7 +47,7 @@ class UserRepository implements UserRepositoryInterface
         return $result;
     }
 
-    public function findBy(array $criteria = [], ?array $orderBy = null, $limit = null, $offset = null)
+    public function findBy(array $criteria = [], ?array $orderBy = null, $limit = null, $offset = null): array
     {
         $where = '';
         foreach ($criteria as $option => $value){
@@ -62,7 +63,7 @@ class UserRepository implements UserRepositoryInterface
         return $this->db->query('SELECT * FROM users '.($where == '' ? '' : 'WHERE '.$where).$orderBy.$limit.$offset)->fetchAll(PDO::FETCH_CLASS, User::class);
     }
 
-    public function findByLike($query)
+    public function findByLike(string $query): array
     {
 
         foreach (explode(" ", $query) as $word) {
@@ -86,7 +87,7 @@ class UserRepository implements UserRepositoryInterface
             ':patronymic' => $user->getPatronymic()]);
 
          if($this->cache){
-             $user->setId($this->db->lastInsertId());
+             $user->setId((int)$this->db->lastInsertId());
              $this->cache->set($user->getId(), $user);
              $this->cache->delete('all');
          }
@@ -106,7 +107,7 @@ class UserRepository implements UserRepositoryInterface
         }
     }
 
-    public function delete($userId)
+    public function delete(int $userId)
     {
 
         $result = $this->db->prepare('DELETE FROM users WHERE id = :id')->execute([':id' => $userId]);

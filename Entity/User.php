@@ -1,26 +1,48 @@
 <?php
 
+declare(strict_types=1);
 
 namespace App\Entity;
 
 
 class User
 {
+    /**
+     * @var int
+     */
     private $id;
 
+    /**
+     * @var string
+     */
     private $email;
 
+    /**
+     * @var string
+     */
     private $currency;
+
 
     private $sum;
 
+    /**
+     * @var string
+     */
     private $firstname;
 
+    /**
+     * @var string
+     */
     private $lastname;
 
+    /**
+     * @var string
+     */
     private $patronymic;
 
-    public function handleRequest($array) {
+
+    public function handleRequest(array $array)
+    {
         $class = new \ReflectionClass(get_class($this));
         $props = $class->getProperties();
         foreach($props as $p) {
@@ -32,113 +54,113 @@ class User
     }
 
     /**
-     * @return mixed
+     * @return int
      */
-    public function getId()
+    public function getId(): ?int
     {
-        return $this->id;
+        return (int)$this->id;
     }
 
     /**
-     * @param mixed $id
+     * @param int $id
      */
-    public function setId($id)
+    public function setId(?int $id)
     {
-        $this->id = (int)$id;
+        $this->id = $id;
     }
 
     /**
-     * @return mixed
+     * @return string
      */
-    public function getEmail()
+    public function getEmail(): string
     {
         return $this->email;
     }
 
     /**
-     * @param mixed $email
+     * @param string $email
      */
-    public function setEmail($email)
+    public function setEmail(string $email)
     {
         $this->email = $email;
     }
 
     /**
-     * @return mixed
+     * @return string
      */
-    public function getCurrency()
+    public function getCurrency(): string
     {
         return $this->currency;
     }
 
     /**
-     * @param mixed $currency
+     * @param string $currency
      */
-    public function setCurrency($currency)
+    public function setCurrency(string $currency)
     {
         $this->currency = $currency;
     }
 
     /**
-     * @return mixed
+     * @return string
      */
-    public function getSum()
+    public function getSum(): string
     {
         return $this->sum;
     }
 
     /**
-     * @param mixed $sum
+     * @param string $sum
      */
-    public function setSum($sum)
+    public function setSum(string $sum)
     {
         $this->sum = $sum;
     }
 
     /**
-     * @return mixed
+     * @return string
      */
-    public function getFirstname()
+    public function getFirstname(): string
     {
         return $this->firstname;
     }
 
     /**
-     * @param mixed $firstname
+     * @param string $firstname
      */
-    public function setFirstname($firstname)
+    public function setFirstname(string $firstname)
     {
         $this->firstname = $firstname;
     }
 
     /**
-     * @return mixed
+     * @return string
      */
-    public function getLastname()
+    public function getLastname(): string
     {
         return $this->lastname;
     }
 
     /**
-     * @param mixed $lastname
+     * @param string $lastname
      */
-    public function setLastname($lastname)
+    public function setLastname(string $lastname)
     {
         $this->lastname = $lastname;
     }
 
     /**
-     * @return mixed
+     * @return string
      */
-    public function getPatronymic()
+    public function getPatronymic(): string
     {
         return $this->patronymic;
     }
 
     /**
-     * @param mixed $patronymic
+     * @param string $patronymic
      */
-    public function setPatronymic($patronymic)
+    public function setPatronymic(string $patronymic)
     {
         $this->patronymic = $patronymic;
     }

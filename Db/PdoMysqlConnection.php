@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Db;
 
 use App\Migrations\MainMigration;
@@ -26,11 +28,11 @@ class PdoMysqlConnection implements DbInterface
         }
     }
 
-    public function getDb()
+    public function getDb(): ?\PDO
     {
         if($this->db instanceof \PDO) {
             return $this->db;
         }
-        return false;
+        return null;
     }
 }

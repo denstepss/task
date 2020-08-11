@@ -35,7 +35,7 @@ class UserController extends Controller
     public function editAction($request)
     {
         if(isset($_GET['id'])) {
-            $this->view(__DIR__ . '/../Views/edit.php', ['user' => $this->repository->find($_GET['id']),
+            $this->view(__DIR__ . '/../Views/edit.php', ['user' => $this->repository->find((int)$_GET['id']),
                 'currencies' => Currencies::getNames()]);
         }
         else {
@@ -56,7 +56,7 @@ class UserController extends Controller
     {
 
         if(isset($_GET['id'])) {
-            $this->repository->delete($_GET['id']);
+            $this->repository->delete((int)$_GET['id']);
         }
         header('Location: /');
     }

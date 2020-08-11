@@ -1,5 +1,6 @@
 <?php
 
+declare(strict_types=1);
 
 namespace App\Migrations;
 
@@ -14,7 +15,8 @@ class MainMigration implements MigrationInterface
         $this->connection = $connection->getDb();
     }
 
-    public function makeMigration(){
+    public function makeMigration(): void
+    {
 
         if($this->connection) {
             $this->connection->exec('CREATE DATABASE IF NOT EXISTS ' . DB . ' CHARACTER SET ' . CHARSET . ' COLLATE utf8mb4_unicode_ci');
