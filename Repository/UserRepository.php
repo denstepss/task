@@ -39,12 +39,7 @@ class UserRepository implements UserRepositoryInterface
 
     public function findAll(): array
     {
-        if($this->cache && !empty($data = $this->cache->get('all'))) { return $data; }
-        $result =  $this->findBy([],['id' => 'DESC']);
-        if($this->cache) {
-            $this->cache->set('all', $result);
-        }
-        return $result;
+        return $this->findBy([],['id' => 'DESC']);
     }
 
     public function findBy(array $criteria = [], ?array $orderBy = null, $limit = null, $offset = null): array
@@ -59,13 +54,21 @@ class UserRepository implements UserRepositoryInterface
         $orderBy = $orderBy ? ' ORDER BY '.key($orderBy).' '. $orderBy[key($orderBy)]: '';
         $limit = $limit ? ' LIMIT '.$limit : '';
         $offset = $offset ? ' OFFSET '.$offset : '';
+        $sql = 'SELECT * FROM users '.($where == '' ? '' : 'WHERE '.$where).$orderBy.$limit.$offset;
+        $encrypted = md5($sql);
+        if($this->cache && !empty($data = $this->cache->get('search')) && isset($data[$encrypted])) { return $data[$encrypted]; }
+        $result = $this->db->query($sql)->fetchAll(PDO::FETCH_CLASS, User::class);
+        if($this->cache){
+            $this->cache->set('search', [md5($sql) => $result]);
+        }
 
-        return $this->db->query('SELECT * FROM users '.($where == '' ? '' : 'WHERE '.$where).$orderBy.$limit.$offset)->fetchAll(PDO::FETCH_CLASS, User::class);
+        return  $result;
     }
 
     public function findByLike(string $query): array
     {
-
+        $encrypted = md5($query);
+        if($this->cache && !empty($data = $this->cache->get('search')) && isset($data[$encrypted])) { return $data[$encrypted]; }
         foreach (explode(" ", $query) as $word) {
             $sql = "SELECT * FROM `users` WHERE `firstname` LIKE :keyword OR `lastname` LIKE :keyword
             OR `patronymic` LIKE :keyword OR `email` LIKE :keyword  OR `sum` LIKE :keyword OR `currency` LIKE :keyword";
@@ -74,7 +77,12 @@ class UserRepository implements UserRepositoryInterface
         }
         $q->execute();
 
-        return $q->fetchAll(PDO::FETCH_CLASS, User::class);
+        $result =  $q->fetchAll(PDO::FETCH_CLASS, User::class);
+        if($this->cache) {
+            $this->cache->set('search', [$encrypted => $result]);
+        }
+
+        return $result;
 
     }
 
@@ -89,7 +97,8 @@ class UserRepository implements UserRepositoryInterface
          if($this->cache){
              $user->setId((int)$this->db->lastInsertId());
              $this->cache->set($user->getId(), $user);
-             $this->cache->delete('all');
+             $this->cache->delete(['search']);
+
          }
     }
 
@@ -103,7 +112,7 @@ class UserRepository implements UserRepositoryInterface
             ':patronymic' => $user->getPatronymic(), ':id' => $user->getId()]);
         if($result && $this->cache){
             $this->cache->set($user->getId(), $user);
-            $this->cache->delete('all');
+            $this->cache->delete(['search']);
         }
     }
 
@@ -112,8 +121,7 @@ class UserRepository implements UserRepositoryInterface
 
         $result = $this->db->prepare('DELETE FROM users WHERE id = :id')->execute([':id' => $userId]);
         if($result && $this->cache){
-            $this->cache->delete($userId);
-            $this->cache->delete('all');
+            $this->cache->delete([$userId, 'search']);
         }
     }
 

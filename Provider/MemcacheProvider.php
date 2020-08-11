@@ -25,9 +25,11 @@ class MemcacheProvider implements CacheProviderInterface
         return $this->cache->set(md5($key), $value);
     }
 
-    public function delete($key)
+    public function delete(array $keys)
     {
-        $this->cache->delete(md5($key));
+        foreach ($keys as $key) {
+            $this->cache->delete(md5($key));
+        }
     }
 
     public function get($key)
