@@ -13,9 +13,6 @@ use App\Repository\UserRepository;
 $pdo = new PdoMysqlConnection();
 $pdo->connect();
 $client = new UserRepository($pdo);
-//$client->save($user);
-//var_dump($client->find(22));
-//var_dump($client->findBy(['firstname' => 'T'],['id' => 'ASC'],2,1));
 $controller = new UserController($client);
 
 switch (strtok($_SERVER['REQUEST_URI'],'?')){
@@ -34,12 +31,13 @@ switch (strtok($_SERVER['REQUEST_URI'],'?')){
     case '/delete':
         $controller->deleteAction($_REQUEST);
         break;
+    case '/strict_search':
+        $controller->searchAction($_REQUEST);
+        break;
+    case '/search_like':
+        $controller->searchLikeAction($_REQUEST);
+        break;
     default:
         header("HTTP/1.0 404 Not Found");
         break;
 }
-//foreach($client->find(1) as $key => $user){
-//    $user->setFirstname($user->getFirstname().$key);
-//    $client->update($user);
-//    $client->delete($user);
-//}
