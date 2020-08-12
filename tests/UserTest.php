@@ -30,6 +30,14 @@ class UserTest extends TestCase
         $this->assertEquals($user, $user2);
         $this->assertNotSame($user, $user2);
 
+    }
+
+    public function testWrongRequest()
+    {
+        $this->expectError();
+        $user = new User();
+        $user->handleRequest(['notCorrectRequest'=>'data']);
+        print get_object_vars($user);
 
 
     }
