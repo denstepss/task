@@ -48,7 +48,7 @@ class User
         foreach($props as $p) {
             if (isset($array[$p->getName()])){
                 $p->setAccessible(true);
-                $p->setValue($this, $array[$p->getName()]);
+                $p->setValue($this, htmlspecialchars($array[$p->getName()],  ENT_QUOTES));
             }
         }
     }
@@ -82,7 +82,7 @@ class User
      */
     public function setEmail(string $email)
     {
-        $this->email = $email;
+        $this->email = htmlspecialchars($email, ENT_QUOTES);
     }
 
     /**
@@ -98,7 +98,7 @@ class User
      */
     public function setCurrency(string $currency)
     {
-        $this->currency = $currency;
+        $this->currency = htmlspecialchars($currency, ENT_QUOTES);
     }
 
     /**
@@ -114,7 +114,7 @@ class User
      */
     public function setSum(string $sum)
     {
-        $this->sum = $sum;
+        $this->sum = htmlspecialchars($sum, ENT_QUOTES);
     }
 
     /**
@@ -130,7 +130,7 @@ class User
      */
     public function setFirstname(string $firstname)
     {
-        $this->firstname = $firstname;
+        $this->firstname = htmlspecialchars($firstname, ENT_QUOTES);
     }
 
     /**
@@ -146,7 +146,7 @@ class User
      */
     public function setLastname(string $lastname)
     {
-        $this->lastname = $lastname;
+        $this->lastname = htmlspecialchars($lastname, ENT_QUOTES);
     }
 
     /**
@@ -162,6 +162,6 @@ class User
      */
     public function setPatronymic(string $patronymic)
     {
-        $this->patronymic = $patronymic;
+        $this->patronymic = htmlspecialchars($patronymic, ENT_QUOTES);
     }
 }

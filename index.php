@@ -7,12 +7,16 @@ include_once 'config.php';
 
 use App\Controller\UserController;
 use App\Db\PdoMysqlConnection;
+use App\Provider\MemcacheProvider;
 use App\Repository\UserRepository;
 
 
 $pdo = new PdoMysqlConnection();
 $pdo->connect();
 $client = new UserRepository($pdo);
+if(ENABLE_MEMCACHE){
+    $client->setCacheProvider(new MemcacheProvider());
+}
 $controller = new UserController($client);
 
 switch (strtok($_SERVER['REQUEST_URI'],'?')){

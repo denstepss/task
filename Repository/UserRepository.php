@@ -6,7 +6,7 @@ namespace App\Repository;
 
 use App\Db\DbInterface;
 use App\Entity\User;
-use App\Provider\MemcacheProvider;
+use App\Provider\CacheProviderInterface;
 use PDO;
 
 class UserRepository implements UserRepositoryInterface
@@ -18,10 +18,13 @@ class UserRepository implements UserRepositoryInterface
     public function __construct(DbInterface $db)
     {
         $this->db = $db->getDb();
-        if(ENABLE_MEMCACHE){
-            $this->cache = new MemcacheProvider();
-        }
     }
+
+    public function setCacheProvider(CacheProviderInterface $cacheProvider)
+    {
+        $this->cache = $cacheProvider;
+    }
+
 
     public function find(int $userId)
     {
@@ -56,7 +59,7 @@ class UserRepository implements UserRepositoryInterface
         $offset = $offset ? ' OFFSET '.$offset : '';
         $sql = 'SELECT * FROM users '.($where == '' ? '' : 'WHERE '.$where).$orderBy.$limit.$offset;
         $encrypted = md5($sql);
-        if($this->cache && !empty($data = $this->cache->get('search')) && isset($data[$encrypted])) { return $data[$encrypted]; }
+        if($this->cache && !empty($data = $this->cache->get('search')) && isset($data[$encrypted])) {  return $data[$encrypted]; }
         $result = $this->db->query($sql)->fetchAll(PDO::FETCH_CLASS, User::class);
         if($this->cache){
             $this->cache->set('search', [md5($sql) => $result]);
@@ -88,6 +91,7 @@ class UserRepository implements UserRepositoryInterface
 
     public function save(User $user)
     {
+
         $sql = "INSERT INTO users (email, currency, sum,  firstname, lastname, patronymic) 
                 VALUES (:email, :currency, :sum,  :firstname, :lastname, :patronymic)";
          $this->db->prepare($sql)->execute([':email' => $user->getEmail(), ':currency' => $user->getCurrency(),
